@@ -233,20 +233,47 @@ function moveGal(direc){
 }
 
 if(document.querySelector("form")){
-  document.querySelector(".form-form").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const form = e.target;
-      const data = new FormData(form);
-      fetch(form.action, {
-      method: form.method,
-      body: data,
-      headers: { 'Accept': 'application/json' }
-      }).then(response => {
-      if (response.ok) {
-          form.reset();
-      } else {
-          console.error("NOT OKAY");
-      }
-      });
-  });
+    document.querySelector("form").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const data = new FormData(e.target);
+
+        
+        async function sendEmail(){
+            let text = `
+                Hi, message was submited through your website.<br><br>
+    
+                Name: ${data.get("firstname")} ${data.get("lastname")}<br><br>
+    
+                Email: ${data.get("email")}<br><br>
+    
+                Phone: ${data.get("phone")}<br><br>
+    
+                Message: ${data.get("message")}<br><br>
+            `;
+            const dataToSend = { text: text };
+            try {
+                const response = await fetch(`https://servers.nextdesignwebsite.com/dysons/api/dysons-email`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json', 
+                    },
+                    body: JSON.stringify(dataToSend), 
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('Error:', errorData.message);
+                    return;
+                }
+
+                const data = await response.json();
+                if(data.message == "success"){
+                    document.querySelector("form").reset();
+                }
+            } catch (error) {
+                console.error('Error posting data:', error);
+            }
+        }
+        sendEmail();
+    });
 }
