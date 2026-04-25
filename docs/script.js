@@ -263,7 +263,6 @@ if(document.querySelector("form")){
               `;
               const dataToSend = { text: text };
               try {
-                  /*
                   const response = await fetch(`https://servers.nextdesignwebsite.com/dysons/api/dysons-email`, {
                       method: 'POST',
                       headers: { 
@@ -279,8 +278,7 @@ if(document.querySelector("form")){
                   }
   
                   const data = await response.json();
-                  */
-                  if(true || data.message == "success"){
+                  if(data.message == "success"){
                       document.querySelector("form").reset();
                       localStorage.setItem("sentDate", todayDate);
                       console.log("w");
