@@ -283,7 +283,7 @@ if(document.querySelector("form")){
                   if(true || data.message == "success"){
                       document.querySelector("form").reset();
                       localStorage.setItem("sentDate", todayDate);
-                      cookieStore.log("w");
+                      console.log("w");
                   }
               } catch (error) {
                   console.error('Error posting data:', error);
