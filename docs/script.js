@@ -249,7 +249,6 @@ if(document.querySelector("form")){
 
         
         async function sendEmail(){
-            if(todayDate != localStorage.getItem("sentDate")){
               let text = `
                   Hi, message was submited through your website.<br><br>
       
@@ -261,7 +260,8 @@ if(document.querySelector("form")){
       
                   Message: ${data.get("message")}<br><br>
               `;
-              const dataToSend = { text: text };
+              const token = data.get("cf-turnstile-response");
+              const dataToSend = { text: text, token: token };
               try {
                   const response = await fetch(`https://servers.nextdesignwebsite.com/dysons/api/dysons-email`, {
                       method: 'POST',
@@ -282,11 +282,12 @@ if(document.querySelector("form")){
                       document.querySelector("form").reset();
                       localStorage.setItem("sentDate", todayDate);
                       console.log("w");
+                  } else if(data.message == "failure"){
+                    console.log("n");
                   }
               } catch (error) {
                   console.error('Error posting data:', error);
               }
-            }
         }
         sendEmail();
     });
